@@ -1,17 +1,23 @@
 #!/usr/bin/python3
-import random
+import sys
+import os
 import  time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
-driver_location ="/usr/bin/chromedriver"
-chrome_location ="/usr/bin/google-chrome"
+
 options = webdriver.ChromeOptions()
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
-chrome_data = "/home/serem_empire/Development/web_dev/bg/telegram_automation/data"
+if sys.platform ==('linux1' or'linux2') :
+    chrome_data = "/home/serem_empire/Development/web_dev/bg/telegram_automation/data"
+    driver_location ="/usr/bin/chromedriver"
+    chrome_location ="/usr/bin/google-chrome"
+    options.binary_location = chrome_location
+elif sys.platform == 'win32':
+    chrome_data = "C:\\Users\\ADMIN\\Development\\telegram_automation\\data"
+    driver_location ="C:\\Users\\ADMIN\\Development\\telegram_automation\\chromedriver.exe"
 options.add_argument("user-data-dir="+str(chrome_data))
-options.binary_location = chrome_location
 browser = webdriver.Chrome(executable_path=driver_location,options=options)
 
 def isexist(name =""):
@@ -44,9 +50,12 @@ def scroll(posx=""):
         height = browser.execute_script("return document.body.scrollHeight;")
 def getusername(filetext="usernames.txt"):
     listuser=[]
-    f =open(filetext,"r")
-    usernamestr=f.read()
-    f.close()
+    try:
+        f =open(filetext,"r")
+        usernamestr=f.read()
+        f.close()
+    except:
+        usernamestr=''
     name =""
     for e in range(0, len(usernamestr)):
         i = usernamestr[e]
@@ -204,4 +213,4 @@ addUserToGrp()
 #collect_users("https://web.telegram.org/k/#@axzczxac8888","new1.txt")
 #collect_users("https://web.telegram.org/k/#@sky_sports_group","new1.txt")
 #collect_users("https://web.telegram.org/k/#@world_cup_2022_group","new1.txt")
-addUserToGrp(filetext="new1.txt") 
+#addUserToGrp(filetext="new1.txt") 
