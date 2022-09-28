@@ -9,14 +9,14 @@ from selenium.webdriver.common.action_chains import ActionChains
 options = webdriver.ChromeOptions()
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
-if sys.platform ==('linux1' or'linux2') :
+chrome_data = os.path.join(sys.path[0], "data")
+if sys.platform ==('linux1' or'linux2'):
     chrome_data = "/home/serem_empire/Development/web_dev/bg/telegram_automation/data"
-    driver_location ="/usr/bin/chromedriver"
+    driver_location ="/usr/bin/chromedriver" or os.path.join(sys.path[0], "chromedriver")
     chrome_location ="/usr/bin/google-chrome"
     options.binary_location = chrome_location
-elif sys.platform == 'win32':
-    chrome_data = "C:\\Users\\ADMIN\\Development\\telegram_automation\\data"
-    driver_location ="C:\\Users\\ADMIN\\Development\\telegram_automation\\chromedriver.exe"
+elif sys.platform == 'win32':   
+    driver_location =os.path.join(sys.path[0], "chromedriver.exe")
 options.add_argument("user-data-dir="+str(chrome_data))
 browser = webdriver.Chrome(executable_path=driver_location,options=options)
 
