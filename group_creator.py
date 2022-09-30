@@ -1,53 +1,9 @@
 #!/usr/bin/python3
-import sys
-import os
-import  time
-from selenium import webdriver
+import time
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
+from easySelenium import easySelenium
 
-options = webdriver.ChromeOptions()
-options.add_experimental_option("excludeSwitches", ["enable-automation"])
-options.add_experimental_option('useAutomationExtension', False)
-chrome_data = os.path.join(sys.path[0], "data")
-if sys.platform ==('linux1' or'linux2'):
-    chrome_data = "/home/serem_empire/Development/web_dev/bg/telegram_automation/data"
-    driver_location ="/usr/bin/chromedriver" or os.path.join(sys.path[0], "chromedriver")
-    chrome_location ="/usr/bin/google-chrome"
-    options.binary_location = chrome_location
-elif sys.platform == 'win32':   
-    driver_location =os.path.join(sys.path[0], "chromedriver.exe")
-options.add_argument("user-data-dir="+str(chrome_data))
-browser = webdriver.Chrome(executable_path=driver_location,options=options)
-
-def isexist(name =""):
-    try:
-        browser.find_element(By.XPATH,value = name)
-        return True
-    except:
-        return False
-def scroll(posx=""):    
-    height = browser.execute_script("return document.body.scrollHeight;")
-    lastheight = 0
-    count = 0
-    while True:
-        print ("scrolling "+str(height)+" to " +str(lastheight))
-        
-        #if lastheight == height:
-            #break
-        if (isexist(posx)):
-            break
-        count = count + 1
-        lastheight = height
-        #browser.execute_script("window.scrollBy(0, " + str(height) + ");")
-        #frame = browser.find_element(By.XPATH,'//*[@id="RightColumn"]/div[2]/div/div')
-        #frame_y = frame.rect['y']
-        act = ActionChains(browser)
-        act.scroll_by_amount(0, height+500)
-        act.perform()
-        
-        time.sleep(10)
-        height = browser.execute_script("return document.body.scrollHeight;")
+chrome = easySelenium()
 def getusername(filetext="usernames.txt"):
     listuser=[]
     try:
@@ -72,22 +28,17 @@ def collect_users(url ="https://web.telegram.org/k/#@paxful_uk_community",filete
     stop = False
     while stop == False:
         try:
-            browser.get(url)
+            chrome.open(url)
             diffgrp = 2
-            while (not(isexist('//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span'))):
-                time.sleep(0.5)
-                print("stack here sleep 1")
-            time.sleep(1)
-            if isexist('//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span/span[1]'):
-                totalmembers = browser.find_element(By.XPATH,('//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span/span[1]')).text
+            chrome.waitUntillExist(xpath='//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span')
+            if chrome.isexist('//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span/span[1]'):
+                totalmembers = chrome.browser.find_element(By.XPATH,('//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span/span[1]')).text
                 diffgrp = 3
             else:
-                totalmembers = browser.find_element(By.XPATH,'//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span').text
+                totalmembers = chrome.browser.find_element(By.XPATH,'//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span').text
                 diffgrp = 2
-            while (not(isexist('//*[@id="column-center"]/div/div/div[2]'))):
-                print("stack here sleep 1.1")
-                time.sleep(0.5)
-            browser.find_element(By.XPATH,'//*[@id="column-center"]/div/div/div[2]').click()
+            chrome.waitUntillExist('//*[@id="column-center"]/div/div/div[2]')
+            chrome.browser.find_element(By.XPATH,'//*[@id="column-center"]/div/div/div[2]').click()
             totalmembers = totalmembers[:-8]
             name =""
             for e in range(0, len(totalmembers)):
@@ -98,24 +49,15 @@ def collect_users(url ="https://web.telegram.org/k/#@paxful_uk_community",filete
             print(totalmembers )
             loop = True
             while loop:
-                time.sleep(1)
-                while (not(isexist(name='//*[@id="column-right"]/div/div/div[2]/div/div/div['+str(diffgrp)+']/div[2]/div[1]/div/ul/a['+str(pos)+']'))):
-                    print("stack here scrolling: "+str(pos))
-                    time.sleep(0.5)
-                    #stop = True
-                    #break
-                    #scroll("//*[@id='column-right']/div/div/div[2]/div/div/div[3]/div[2]/div[1]/div/ul/a["+str(pos)+"]")
-                browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div/div[2]/div/div/div['+str(diffgrp)+']/div[2]/div[1]/div/ul/a['+str(pos)+']').click()
-                while (not(isexist('//*[@id="column-right"]'))):
-                    print("stack here sleep 3")
-                    time.sleep(0.5)
+                chrome.waitUntillExist(name='//*[@id="column-right"]/div/div/div[2]/div/div/div['+str(diffgrp)+']/div[2]/div[1]/div/ul/a['+str(pos)+']')
+                chrome.browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div/div[2]/div/div/div['+str(diffgrp)+']/div[2]/div[1]/div/ul/a['+str(pos)+']').click()
+                chrome.waitUntillExist('//*[@id="column-right"]')
                 try:
-                    time.sleep(1)
-                    username = browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div/div[2]/div/div/div[2]/div/div/div[2]/div[3]')
+                    username = chrome.browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div/div[2]/div/div/div[2]/div/div/div[2]/div[3]')
                     uname = str(username.text)
                 except:
                     try:
-                        username = browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div/div[2]/div/div/div[1]/div/div/div[4]/div[3]')
+                        username = chrome.browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div/div[2]/div/div/div[1]/div/div/div[4]/div[3]')
                         uname = str(username.text)
                     except:
                         uname =""
@@ -124,7 +66,7 @@ def collect_users(url ="https://web.telegram.org/k/#@paxful_uk_community",filete
                 if not(uname ==""):
                     f.write(str(uname)+"\n")
                 f.close()                
-                browser.find_element(By.XPATH,'//*[@id="column-center"]/div/div[2]/div[2]/div[1]/button').click()
+                chrome.browser.find_element(By.XPATH,'//*[@id="column-center"]/div/div[2]/div[2]/div[1]/button').click()
                 pos = pos + 1
                 print("pos= "+str(pos))
                 if (pos >int(totalmembers)):
@@ -140,77 +82,54 @@ def addUserToGrp(url = "https://web.telegram.org/k/#+HC4K17GVhKI0YmJk",filetext=
     main = True
     maincount=pos
     while main:
-        try:
+        #try:
             listuser = getusername(filetext)
             if (maincount == len(listuser)):
                     main = False
                     break
-            browser.get(url)
-            time.sleep(1)
-            while (not(isexist('//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span'))):
-                print("stack here sleep 1")
-                time.sleep(0.5)
-            time.sleep(1)
-            while (not(isexist('//*[@id="column-center"]/div/div/div[2]'))):
-                print("stack here sleep 1.1")
-                time.sleep(0.5)    
-            browser.find_element(By.XPATH,'//*[@id="column-center"]/div/div/div[2]').click()
+            chrome.open(url)
+            chrome.waitUntillExist('//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span')
+            chrome.waitUntillExist('//*[@id="column-center"]/div/div/div[2]')   
+            chrome.browser.find_element(By.XPATH,'//*[@id="column-center"]/div/div/div[2]').click()
             while True:
                 if (maincount == len(listuser)):
                     main = False
                     break
-                while ((isexist('//*[@id="column-right"]/div/div[2]/div[2]/div/div[1]/div/div/div/div/div'))):
-                    print("stack here sleep 2")
-                    try:                    
-                        browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div[2]/div[1]/button').click()
-                    except:
-                        pass
-                    time.sleep(0.5)
-                time.sleep(1)    
-                browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div/div[2]/button').click()
-                while (not(isexist('//*[@id="column-right"]/div/div[2]/div[2]/div/div[1]/div/div/div/div/div/input'))):
-                    print("stack here sleep 3")
-                    time.sleep(0.5)
-                time.sleep(1)    
-                search = browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div[2]/div[2]/div/div[1]/div/div/div/div/div/input')
+                chrome.waitUntillExist('//*[@id="column-right"]/div/div[2]/div[2]/div/div[1]/div/div/div/div/div')   
+                chrome.browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div/div[2]/button').click()
+                chrome.waitUntillExist('//*[@id="column-right"]/div/div[2]/div[2]/div/div[1]/div/div/div/div/div/input')   
+                search = chrome.browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div[2]/div[2]/div/div[1]/div/div/div/div/div/input')
                 search.send_keys(listuser[maincount])
                 l1=0
                 go=True
                 time.sleep(10)
-                while (not(isexist('//*[@id="column-right"]/div/div[2]/div[2]/div/div[2]/div/div[2]/div/div/ul/a[1]'))):
+                while (not(chrome.isexist('//*[@id="column-right"]/div/div[2]/div[2]/div/div[2]/div/div[2]/div/div/ul/a[1]'))):
                     print("stack here sleep 4")
                     l1=l1+1
                     if (l1==(40)):
                         go=False
                         time.sleep(0.5)
-                        browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div[2]/div[1]/button').click()
+                        chrome.browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div[2]/div[1]/button').click()
                         break
                     time.sleep(0.5)
                 time.sleep(1)    
                 if go == True:
-                    browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div[2]/div[2]/div/div[2]/div/div[2]/div/div/ul/a[1]').click()
-                    while (not(isexist('//*[@id="column-right"]/div/div[2]/div[2]/button'))):
-                        print("stack here sleep 5")
-                        time.sleep(0.5)
-                    time.sleep(1)    
-                    browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div[2]/div[2]/button').click()
-                    while (not(isexist('/html/body/div[5]/div/div[2]/button[1]'))):
-                        print("stack here sleep 5")
-                        time.sleep(0.5)
-                    time.sleep(1)    
-                    browser.find_element(By.XPATH,'/html/body/div[5]/div/div[2]/button[1]').click()
-                    time.sleep(1) 
-
+                    chrome.browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div[2]/div[2]/div/div[2]/div/div[2]/div/div/ul/a[1]').click()
+                    chrome.waitUntillExist('//*[@id="column-right"]/div/div[2]/div[2]/button')
+                    chrome.browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div[2]/div[2]/button').click()
+                    chrome.waitUntillExist('/html/body/div[5]/div/div[2]/button[1]')   
+                    chrome.browser.find_element(By.XPATH,'/html/body/div[5]/div/div[2]/button[1]').click()
                 maincount += 1
                 print(maincount)
-        except:
-            print("crush at:"+str(maincount))
+                
+        #except:
+            #print("crush at:"+str(maincount))
     print("addUserToGrp ended")
     
 
 #####choose action
-addUserToGrp()  
-#collect_users("https://web.telegram.org/k/#@axzczxac8888","new1.txt")
+#addUserToGrp()  
+collect_users("https://web.telegram.org/k/#@axzczxac8888","new1.txt")
 #collect_users("https://web.telegram.org/k/#@sky_sports_group","new1.txt")
 #collect_users("https://web.telegram.org/k/#@world_cup_2022_group","new1.txt")
 #addUserToGrp(filetext="new1.txt") 
