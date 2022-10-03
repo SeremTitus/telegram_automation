@@ -1,3 +1,4 @@
 /chrome_data
 chromedriver.exe
 chromedriver
+__pycache__
