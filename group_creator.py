@@ -31,7 +31,7 @@ def collect_users(url ="https://web.telegram.org/k/#@paxful_uk_community",filete
             chrome.open(url)
             diffgrp = 2
             chrome.waitUntillExist(xpath='//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span')
-            if chrome.isexist('//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span/span[1]'):
+            if chrome.isExist('//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span/span[1]'):
                 totalmembers = chrome.browser.find_element(By.XPATH,('//*[@id="column-center"]/div/div/div[2]/div[1]/div[1]/div/div/div[2]/div/span/span[1]')).text
                 diffgrp = 3
             else:
@@ -49,7 +49,7 @@ def collect_users(url ="https://web.telegram.org/k/#@paxful_uk_community",filete
             print(totalmembers )
             loop = True
             while loop:
-                chrome.waitUntillExist(name='//*[@id="column-right"]/div/div/div[2]/div/div/div['+str(diffgrp)+']/div[2]/div[1]/div/ul/a['+str(pos)+']')
+                chrome.waitUntillExist(xpath='//*[@id="column-right"]/div/div/div[2]/div/div/div['+str(diffgrp)+']/div[2]/div[1]/div/ul/a['+str(pos)+']')
                 chrome.browser.find_element(By.XPATH,'//*[@id="column-right"]/div/div/div[2]/div/div/div['+str(diffgrp)+']/div[2]/div[1]/div/ul/a['+str(pos)+']').click()
                 chrome.waitUntillExist('//*[@id="column-right"]')
                 try:
@@ -103,7 +103,7 @@ def addUserToGrp(url = "https://web.telegram.org/k/#+HC4K17GVhKI0YmJk",filetext=
                 l1=0
                 go=True
                 time.sleep(10)
-                while (not(chrome.isexist('//*[@id="column-right"]/div/div[2]/div[2]/div/div[2]/div/div[2]/div/div/ul/a[1]'))):
+                while (not(chrome.isExist('//*[@id="column-right"]/div/div[2]/div[2]/div/div[2]/div/div[2]/div/div/ul/a[1]'))):
                     print("stack here sleep 4")
                     l1=l1+1
                     if (l1==(40)):
