@@ -22,7 +22,7 @@ def getusername(filetext="usernames.txt"):
             name = ""
     return listuser
 
-def collect_users(url ="https://web.telegram.org/k/#@paxful_uk_community",filetext="usernames.txt"):
+def collect_users(url =" ",filetext="usernames.txt"):
     print("collect_users started")
     pos = 1
     stop = False
@@ -77,7 +77,7 @@ def collect_users(url ="https://web.telegram.org/k/#@paxful_uk_community",filete
             print("crush at:"+str(pos))
     print("collect_users ended")
 
-def addUserToGrp(url = "https://web.telegram.org/k/#+HC4K17GVhKI0YmJk",filetext="usernames.txt",pos=0):
+def addUserToGrp(url = " ",filetext="usernames.txt",pos=0):
     print("addUserToGrp started")
     main = True
     maincount=pos
@@ -126,10 +126,3 @@ def addUserToGrp(url = "https://web.telegram.org/k/#+HC4K17GVhKI0YmJk",filetext=
             #print("crush at:"+str(maincount))
     print("addUserToGrp ended")
     
-
-#####choose action
-#addUserToGrp()  
-collect_users("https://web.telegram.org/k/#@axzczxac8888","new1.txt")
-#collect_users("https://web.telegram.org/k/#@sky_sports_group","new1.txt")
-#collect_users("https://web.telegram.org/k/#@world_cup_2022_group","new1.txt")
-#addUserToGrp(filetext="new1.txt") 
